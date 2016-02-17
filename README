@@ -1,0 +1,11 @@
+Authors
+
+Name	 Pavle Kostovic
+Login	 pavle@cs.wisc.edu
+
+Name	 Kartik Ayalasomayaulajula
+Login	 ayasomayaula@cs.wisc.edu
+
+For part A, the coding was relatively simple. We essentially expounded upon the code that was given to us by using it to create a producer/consumer relationship between the master thread and the pool of worker threads. Our Master thread handles the job of the producer by reading in HTTP requests and enqueueing them into a shared queue from which Workers can pull. The Workers themselves handle the job of servicing all HTTP requests. Our biggest hurdles with this part were figuring out how to create this P/C relationship, and then adapting the code such that we could atomically handle requests. That, and accidentally deleting our entire project at one point. The data structure we used to hold this queue is a simple linked list implementation of a queue. The simplified format resembles a queue entirely, so enqueuing and dequeuing the producers/consumers was quite simple when we had to code the actually PC relationship.
+
+Part B was very complicated. We ended up following Remzi's video several times over to understand the control flow that we were supposed to enact. It still wasn't easy. Much of our work was done in the kernel, the main file being proc.c. In it, we had to write clone() and join(), as well as update wait(), exit() and growproc() to compensate for the new execution structure. We especially ran into trouble with the stack allocation. We tried a variety of methods until we found that we could simply use pointer arithmetic to allocate values on the stack at some specific location. The new syscalls were added in syscall.c, they have error-checking code in sysproc.c as well. The other main section was user/ulib.c, we created the thread and lock manipulation code there.
